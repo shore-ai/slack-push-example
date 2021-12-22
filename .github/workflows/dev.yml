@@ -40,16 +40,12 @@ jobs:
                 "author_icon": "${{ github.event.sender.avatar_url }}",
                 "fields": [
                   {
-                    "title": "Message",
-                    "value": "Web Daily Build Success \n https://www.ai-ops.cn/home"
+                    "title": "Web Daily Build",
+                    "value": "Success \n https://www.ai-ops.cn/home"
                   },
                   {
                     "title": "Commit Message",
                     "value": "${{ env.COMMIT_MESSAGE }}"
-                  },
-                  {
-                    "title": "Compare URL",
-                    "value": "${{ github.event.compare }}"
                   }
                 ]
               }
