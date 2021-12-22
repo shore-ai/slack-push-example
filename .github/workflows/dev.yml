@@ -25,7 +25,7 @@ jobs:
         run: echo Add a test step!
       - uses: 8398a7/action-slack@v3
         with:
-          status: ${{ job.status }}
+          status: custom
           fields: repo,message,commit,author,pullRequest # selectable (default: repo,message)
           custom_payload: |
             {
