@@ -23,13 +23,34 @@ jobs:
       # Runs test...
       - name: Run a test...
         run: echo Add a test step!
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
+      - name: Set COMMIT_MESSAGE
+        run: echo "COMMIT_MESSAGE=${{ github.event.head_commit.message }}" | tr '\n' ' ' >> $GITHUB_ENV
+      - name: Slack Notification on SUCCESS
+        if: success()
+        uses: tokorom/action-slack-incoming-webhook@main
         env:
-          SLACK_CHANNEL: daily-build
-          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_MESSAGE: 'Web has been published to the Dev Env./n https://www.aiops.cn/home /n:rocket:'
-          SLACK_TITLE: Daily Build of Web
-          SLACK_USERNAME: rtCamp
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }} 
+          INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          text: Successfully automated deployment.
+          attachments: |
+            [
+              {
+                "color": "good",
+                "author_name": "${{ github.actor }}",
+                "author_icon": "${{ github.event.sender.avatar_url }}",
+                "fields": [
+                  {
+                    "title": "Message",
+                    "value": "Web Daily Build Success \n https://www.ai-ops.cn/home"
+                  },
+                  {
+                    "title": "Commit Message",
+                    "value": "${{ env.COMMIT_MESSAGE }}"
+                  },
+                  {
+                    "title": "Compare URL",
+                    "value": "${{ github.event.compare }}"
+                  }
+                ]
+              }
+            ]
